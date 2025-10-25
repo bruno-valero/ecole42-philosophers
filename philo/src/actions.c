@@ -1,22 +1,15 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   validate_input.h                                   :+:      :+:    :+:   */
+/*   actions.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: brunofer <brunofer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/24 18:07:56 by brunofer          #+#    #+#             */
-/*   Updated: 2025/10/25 13:22:29 by brunofer         ###   ########.fr       */
+/*   Created: 2025/10/25 16:03:40 by brunofer          #+#    #+#             */
+/*   Updated: 2025/10/25 16:04:36 by brunofer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef VALIDATE_INPUT_H
-# define VALIDATE_INPUT_H
+#include "actions.h"
 
-# include "lib/lib.h"
-# include <limits.h>
-# include <stdlib.h>
 
-int	*validate_arguments(int argc, char **argv);
-
-#endif

@@ -12,11 +12,11 @@ NAME = philo
 INCLUDES = -I includes
 CC = cc
 # CFLAGS = -Wall -Werror -Wextra -g3 -Ofast -march=native -flto -funroll-loops $(INCLUDES)
-CFLAGS = -Wall -Werror -Wextra -g3 $(INCLUDES)
+CFLAGS = -Wall -Werror -Wextra -g3 -pthread $(INCLUDES)
 
 # ============== SRC FILES =================
 
-SRC_FILES = src/teste.c
+SRC_FILES = src/teste.c src/validate_input.c src/state.c
 
 # ============== PROGRAM FILES =================
 MAIN_PROGRAM=src/main.c

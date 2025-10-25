@@ -1,18 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lib.h                                              :+:      :+:    :+:   */
+/*   main.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: brunofer <brunofer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/24 17:51:24 by brunofer          #+#    #+#             */
-/*   Updated: 2025/10/24 18:08:56 by brunofer         ###   ########.fr       */
+/*   Created: 2025/10/25 15:17:11 by brunofer          #+#    #+#             */
+/*   Updated: 2025/10/25 15:20:44 by brunofer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIB_H
-# define LIB_H
+#ifndef MAIN_H
+# define MAIN_H
 
-void	*ft_bzero(void *s, int size);
+# include <stdio.h>
+# include <limits.h>
+# include "validate_input.h"
+# include "state.h"
 
 #endif
