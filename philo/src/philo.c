@@ -6,7 +6,7 @@
 /*   By: brunofer <brunofer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 12:25:31 by brunofer          #+#    #+#             */
-/*   Updated: 2025/10/25 16:02:57 by brunofer         ###   ########.fr       */
+/*   Updated: 2025/10/25 16:29:52 by brunofer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ t_philo	create_philosopher(
 
 	philo.self_ref = &philo;
 	philo.id = id;
+	philo.is_eating = 0;
 	philo.right_fork = forks[id - 1];
 	if (id == 1)
 		philo.left_fork = forks[forks_amount - 1];
@@ -37,6 +38,7 @@ t_fork	create_fork(int id)
 
 	fork.self_ref = &fork;
 	fork.id = id;
+	fork.is_used_by = 0;
 	fork.error = pthread_mutex_init(&fork.mutex, NULL);
 	fork.destroy = destroy_fork;
 	return (fork);

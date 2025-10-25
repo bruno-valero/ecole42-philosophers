@@ -6,11 +6,27 @@
 /*   By: brunofer <brunofer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 16:03:10 by brunofer          #+#    #+#             */
-/*   Updated: 2025/10/25 16:03:33 by brunofer         ###   ########.fr       */
+/*   Updated: 2025/10/25 16:30:53 by brunofer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ACTIONS_H
 # define ACTIONS_H
+
+# include "philo.h"
+
+typedef enum e_wich_fork	t_wich_fork;
+enum e_wich_fork
+{
+	RIGHT_FORK,
+	LEFT_FORK
+};
+
+typedef enum e_eat_state	t_eat_state;
+enum e_eat_state
+{
+	START_TO_EAT,
+	STOP_TO_EAT
+};
 
 #endif
