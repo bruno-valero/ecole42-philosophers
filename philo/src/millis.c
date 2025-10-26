@@ -1,21 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   validate_input.h                                   :+:      :+:    :+:   */
+/*   millis.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: brunofer <brunofer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/24 18:07:56 by brunofer          #+#    #+#             */
-/*   Updated: 2025/10/26 14:13:06 by brunofer         ###   ########.fr       */
+/*   Created: 2025/10/26 16:33:04 by brunofer          #+#    #+#             */
+/*   Updated: 2025/10/26 16:38:59 by brunofer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef VALIDATE_INPUT_H
-# define VALIDATE_INPUT_H
+#include "millis.h"
 
-# include <limits.h>
-# include <stdlib.h>
+unsigned long	millis(void)
+{
+	struct timeval	timeofday;
+	unsigned long	sec_to_millis;
+	unsigned long	micro_to_millis;
+	unsigned long	millis;
 
-int	*validate_arguments(int argc, char **argv);
-
-#endif
+	gettimeofday(&timeofday, 0);
+	sec_to_millis = timeofday.tv_sec * 1000;
+	micro_to_millis = timeofday.tv_usec / 1000;
+	millis = sec_to_millis + micro_to_millis;
+	return (millis);
+}

@@ -6,15 +6,17 @@
 /*   By: brunofer <brunofer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 16:03:10 by brunofer          #+#    #+#             */
-/*   Updated: 2025/10/25 18:43:36 by brunofer         ###   ########.fr       */
+/*   Updated: 2025/10/26 16:39:25 by brunofer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ACTIONS_H
 # define ACTIONS_H
 
-# include "philo.h"
 # include <stdio.h>
+# include "millis.h"
+
+typedef struct s_philo		t_philo;
 
 typedef enum e_wich_fork	t_wich_fork;
 enum e_wich_fork
@@ -43,5 +45,12 @@ enum e_sleep_state
 	START_TO_SLEEP,
 	STOP_TO_SLEEP
 };
+
+void	get_fork(t_philo *philo, t_wich_fork wich_fork);
+void	drop_fork(t_philo *philo, t_wich_fork wich_fork);
+void	eat(t_philo *philo, t_eat_state eat_state);
+void	think(t_philo *philo, t_think_state think_state);
+void	ft_sleep(t_philo *philo, t_sleep_state sleep_state);
+void	print_fok_state(t_philo *philo, t_wich_fork wich_fork, unsigned long time);
 
 #endif

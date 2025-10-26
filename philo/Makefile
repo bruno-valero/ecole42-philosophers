@@ -16,7 +16,7 @@ CFLAGS = -Wall -Werror -Wextra -g3 -pthread $(INCLUDES)
 
 # ============== SRC FILES =================
 
-SRC_FILES = src/teste.c src/validate_input.c src/state.c
+SRC_FILES = src/teste.c src/validate_input.c src/state.c src/state_utils.c src/philo.c src/actions_utils.c src/actions.c src/millis.c
 
 # ============== PROGRAM FILES =================
 MAIN_PROGRAM=src/main.c

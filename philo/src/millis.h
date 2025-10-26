@@ -1,21 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   validate_input.h                                   :+:      :+:    :+:   */
+/*   millis.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: brunofer <brunofer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/24 18:07:56 by brunofer          #+#    #+#             */
-/*   Updated: 2025/10/26 14:13:06 by brunofer         ###   ########.fr       */
+/*   Created: 2025/10/26 16:32:38 by brunofer          #+#    #+#             */
+/*   Updated: 2025/10/26 16:39:07 by brunofer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef VALIDATE_INPUT_H
-# define VALIDATE_INPUT_H
+#ifndef MILLIS_H
+# define MILLIS_H
 
-# include <limits.h>
-# include <stdlib.h>
+# include <sys/time.h>
 
-int	*validate_arguments(int argc, char **argv);
+unsigned long	millis(void);
 
 #endif

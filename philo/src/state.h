@@ -6,7 +6,7 @@
 /*   By: brunofer <brunofer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 17:44:01 by brunofer          #+#    #+#             */
-/*   Updated: 2025/10/25 19:35:17 by brunofer         ###   ########.fr       */
+/*   Updated: 2025/10/26 17:45:45 by brunofer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,18 +32,20 @@ enum e_error_state
 	ERROR_STATE_OK,
 	ERROR_ON_FORK_CREATION,
 	ERROR_ON_PHILO_CREATION,
+	ERROR_ON_PRINT_MUTEXT_CREATION,
 };
 
 typedef struct s_state		t_state;
 struct s_state
 {
 	t_input			input;
-	t_philo			*philos;
-	t_fork			*forks;
+	t_philo			**philos;
+	t_fork			**forks;
 	t_error_state	error;
-	pthread_mutex_t	print_mutex;
+	pthread_mutex_t	*print_mutex;
 };
 
-t_state	create_state(int input_data[5]);
+t_create_philo	params_philo(int id, t_state *state);
+t_state			create_state(int input_data[5]);
 
 #endif
