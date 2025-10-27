@@ -6,14 +6,14 @@
 /*   By: brunofer <brunofer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 12:25:31 by brunofer          #+#    #+#             */
-/*   Updated: 2025/10/26 17:56:18 by brunofer         ###   ########.fr       */
+/*   Updated: 2025/10/27 19:59:41 by brunofer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static void	destroy_fork(t_fork fork);
-static void	*stop_philosopher(t_philo philo);
+static void	destroy_fork(t_fork *fork);
+static void	*stop_philosopher(t_philo *philo);
 static void	*philo_routine(void *input);
 
 t_philo	*create_philo(t_create_philo create_philo)
@@ -21,23 +21,25 @@ t_philo	*create_philo(t_create_philo create_philo)
 	t_philo	*philo;
 
 	philo = malloc(sizeof(t_philo));
-	philo->self_ref = &philo;
-	philo->rules = create_philo.rules;
-	philo->id = create_philo.id;
-	philo->is_eating = 0;
-	philo->is_thinking = 0;
-	philo->is_sleepping = 0;
-	philo->print_mutex = create_philo.print_mutex;
-	philo->right_fork = create_philo.forks[philo->id - 1];
-	if (philo->id == 1)
-		philo->left_fork = create_philo.forks[create_philo.forks_amount - 1];
-	else
-		philo->left_fork = create_philo.forks[philo->id - 2];
+	if (!philo)
+		return (NULL);
+	ft_bzero(philo, sizeof(t_philo));
+	philo->last_meal = create_philo.start_time;
+	philo->pause_mutex = malloc(sizeof(pthread_mutex_t));
+	if (!philo->pause_mutex)
+	{
+		free(philo);
+		return (NULL);
+	}
+	if (pthread_mutex_init(philo->pause_mutex, NULL))
+	{
+		philo->error = 1;
+		return (philo);
+	}
+	init_philo(create_philo, philo);
 	philo->stop = stop_philosopher;
-	philo->error = 0;
 	philo->error = pthread_create(
 			&philo->thread, NULL, philo_routine, philo);
-
 	return (philo);
 }
 
@@ -54,14 +56,26 @@ t_fork	*create_fork(int id)
 	return (fork);
 }
 
-static void	destroy_fork(t_fork fork)
+static void	destroy_fork(t_fork *fork)
 {
-	pthread_mutex_destroy(&fork.mutex);
+	t_fork	**self_ref;
+
+	self_ref = fork->self_ref;
+	pthread_mutex_destroy(&fork->mutex);
+	free(fork);
+	*self_ref = NULL;
 }
 
-static void	*stop_philosopher(t_philo philo)
+static void	*stop_philosopher(t_philo *philo)
 {
-	pthread_join(philo.thread, NULL);
+	t_philo	**self_ref;
+
+	self_ref = philo->self_ref;
+	pthread_join(philo->thread, NULL);
+	pthread_mutex_destroy(philo->pause_mutex);
+	free(philo->pause_mutex);
+	free(philo);
+	*self_ref = NULL;
 	return (NULL);
 }
 
@@ -70,6 +84,9 @@ static void	*philo_routine(void *param)
 	t_philo	*philo;
 
 	philo = (t_philo *)param;
-	print_fok_state(philo, LEFT_FORK, millis());
+	while (millis() < philo->start_time)
+		;
+	while (!*philo->someone_died)
+		philo_routine_step(philo);
 	return (NULL);
 }

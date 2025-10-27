@@ -6,7 +6,7 @@
 /*   By: brunofer <brunofer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 13:55:16 by brunofer          #+#    #+#             */
-/*   Updated: 2025/10/26 17:48:24 by brunofer         ###   ########.fr       */
+/*   Updated: 2025/10/27 19:20:35 by brunofer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ t_create_philo	params_philo(int id, t_state *state)
 	t_create_philo	create_philo;
 
 	create_philo.id = id;
+	create_philo.start_time = state->start_time;
+	create_philo.someone_died = &state->someone_died;
 	create_philo.forks = state->forks;
 	create_philo.forks_amount = state->input.philos;
 	create_philo.print_mutex = state->print_mutex;
@@ -26,4 +28,16 @@ t_create_philo	params_philo(int id, t_state *state)
 	create_philo.rules.time_to_sleep = state->input.time_to_sleep;
 	create_philo.rules.times_to_eat = state->input.times_to_eat;
 	return (create_philo);
+}
+
+int	init_state_mutexes(t_state *state)
+{
+	state->print_mutex = malloc(sizeof(pthread_mutex_t));
+	if (pthread_mutex_init(state->print_mutex, NULL))
+		state->error = ERROR_ON_PRINT_MUTEXT_CREATION;
+	if (state->error == ERROR_ON_PRINT_MUTEXT_CREATION)
+		free(state->print_mutex);
+	if (state->error == ERROR_ON_PRINT_MUTEXT_CREATION)
+		return (0);
+	return (1);
 }
