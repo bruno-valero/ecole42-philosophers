@@ -6,7 +6,7 @@
 /*   By: brunofer <brunofer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 15:32:31 by brunofer          #+#    #+#             */
-/*   Updated: 2025/10/27 19:43:45 by brunofer         ###   ########.fr       */
+/*   Updated: 2025/10/28 18:08:09 by brunofer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	init_philo(t_create_philo create_philo, t_philo *philo)
 	philo->rules = create_philo.rules;
 	philo->id = create_philo.id;
 	philo->print_mutex = create_philo.print_mutex;
+	philo->dead_mutex = create_philo.dead_mutex;
 	philo->right_fork = create_philo.forks[philo->id - 1];
 	if (philo->id == 1)
 		philo->left_fork = create_philo.forks[create_philo.forks_amount - 1];
@@ -46,7 +47,7 @@ static void	philo_eat(t_philo *philo)
 	eat(philo, STOP_TO_EAT);
 }
 
-static void	philo_think(t_philo *philo)
+void	philo_think(t_philo *philo)
 {
 	if (*philo->someone_died)
 		return ;
@@ -57,6 +58,10 @@ static void	philo_think(t_philo *philo)
 
 void	philo_routine_step(t_philo *philo)
 {
+	/* if (philo->id % 2)
+	{
+		usleep(1000 * philo->rules.time_to_eat);
+	} */
 	if (philo->id % 2)
 	{
 		philo_eat(philo);
@@ -69,4 +74,8 @@ void	philo_routine_step(t_philo *philo)
 		philo_think(philo);
 		philo_eat(philo);
 	}
+	/* philo_eat(philo);
+	philo_sleep(philo);
+	usleep(1000); */
+	//philo_think(philo);
 }

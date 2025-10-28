@@ -6,7 +6,7 @@
 /*   By: brunofer <brunofer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 15:03:14 by brunofer          #+#    #+#             */
-/*   Updated: 2025/10/27 19:20:25 by brunofer         ###   ########.fr       */
+/*   Updated: 2025/10/28 18:26:05 by brunofer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ t_state	create_state(int input_data[5])
 {
 	t_state			state;
 
+	printf("create_state\n");
 	state.someone_died = 0;
 	state.monitor = NULL;
 	state.error = ERROR_STATE_OK;
@@ -118,6 +119,7 @@ static void	destroy_state(t_state *state)
 	while (--i >= 0)
 		state->forks[i]->destroy(state->forks[i]);
 	free(state->forks);
+	state->forks = NULL;
 	pthread_mutex_destroy(state->print_mutex);
 	free(state->print_mutex);
 	if (state->monitor)

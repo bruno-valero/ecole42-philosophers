@@ -6,7 +6,7 @@
 /*   By: brunofer <brunofer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 16:03:40 by brunofer          #+#    #+#             */
-/*   Updated: 2025/10/27 19:41:54 by brunofer         ###   ########.fr       */
+/*   Updated: 2025/10/28 18:02:03 by brunofer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 void	get_fork(t_philo *philo, t_wich_fork wich_fork)
 {
-	if (*philo->someone_died)
+	if (verify_death(philo))
 		return ;
 	pthread_mutex_lock(philo->pause_mutex);
 	if (wich_fork == RIGHT_FORK)
@@ -45,7 +45,7 @@ void	get_fork(t_philo *philo, t_wich_fork wich_fork)
 
 void	drop_fork(t_philo *philo, t_wich_fork wich_fork)
 {
-	if (*philo->someone_died)
+	if (verify_death(philo))
 		return ;
 	pthread_mutex_lock(philo->pause_mutex);
 	if (wich_fork == RIGHT_FORK)
@@ -69,7 +69,7 @@ void	drop_fork(t_philo *philo, t_wich_fork wich_fork)
 
 void	eat(t_philo *philo, t_eat_state eat_state)
 {
-	if (*philo->someone_died)
+	if (verify_death(philo))
 		return ;
 	if (!philo->is_eating && eat_state == START_TO_EAT)
 	{
@@ -88,12 +88,14 @@ void	eat(t_philo *philo, t_eat_state eat_state)
 		drop_fork(philo, RIGHT_FORK);
 		drop_fork(philo, LEFT_FORK);
 		philo->is_eating = 0;
+		if (*philo->rules.times_to_eat > 0)
+			*philo->rules.times_to_eat -= 1;
 	}
 }
 
 void	think(t_philo *philo, t_think_state think_state)
 {
-	if (*philo->someone_died)
+	if (verify_death(philo))
 		return ;
 	pthread_mutex_lock(philo->pause_mutex);
 	if (think_state == START_TO_THINK)
@@ -111,7 +113,7 @@ void	think(t_philo *philo, t_think_state think_state)
 
 void	ft_sleep(t_philo *philo, t_sleep_state sleep_state)
 {
-	if (*philo->someone_died)
+	if (verify_death(philo))
 		return ;
 	pthread_mutex_lock(philo->pause_mutex);
 	if (sleep_state == START_TO_SLEEP)

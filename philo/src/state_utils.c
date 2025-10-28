@@ -6,7 +6,7 @@
 /*   By: brunofer <brunofer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 13:55:16 by brunofer          #+#    #+#             */
-/*   Updated: 2025/10/27 19:20:35 by brunofer         ###   ########.fr       */
+/*   Updated: 2025/10/28 18:00:17 by brunofer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,12 @@ t_create_philo	params_philo(int id, t_state *state)
 	create_philo.forks = state->forks;
 	create_philo.forks_amount = state->input.philos;
 	create_philo.print_mutex = state->print_mutex;
+	create_philo.dead_mutex = state->dead_mutex;
 	create_philo.rules.philos = state->input.philos;
 	create_philo.rules.time_to_die = state->input.time_to_die;
 	create_philo.rules.time_to_eat = state->input.time_to_eat;
 	create_philo.rules.time_to_sleep = state->input.time_to_sleep;
-	create_philo.rules.times_to_eat = state->input.times_to_eat;
+	create_philo.rules.times_to_eat = &state->input.times_to_eat;
 	return (create_philo);
 }
 
@@ -37,7 +38,14 @@ int	init_state_mutexes(t_state *state)
 		state->error = ERROR_ON_PRINT_MUTEXT_CREATION;
 	if (state->error == ERROR_ON_PRINT_MUTEXT_CREATION)
 		free(state->print_mutex);
-	if (state->error == ERROR_ON_PRINT_MUTEXT_CREATION)
+
+	state->dead_mutex = malloc(sizeof(pthread_mutex_t));
+	if (pthread_mutex_init(state->dead_mutex, NULL))
+		state->error = ERROR_ON_DEAD_MUTEXT_CREATION;
+	if (state->error == ERROR_ON_DEAD_MUTEXT_CREATION)
+		free(state->dead_mutex);
+	if (state->error == ERROR_ON_DEAD_MUTEXT_CREATION
+		|| state->error == ERROR_ON_DEAD_MUTEXT_CREATION)
 		return (0);
 	return (1);
 }

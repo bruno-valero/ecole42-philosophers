@@ -6,7 +6,7 @@
 /*   By: brunofer <brunofer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 12:25:31 by brunofer          #+#    #+#             */
-/*   Updated: 2025/10/27 19:59:41 by brunofer         ###   ########.fr       */
+/*   Updated: 2025/10/28 18:00:47 by brunofer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,15 @@ static void	*philo_routine(void *param)
 	philo = (t_philo *)param;
 	while (millis() < philo->start_time)
 		;
-	while (!*philo->someone_died)
+	if (philo->rules.philos == 1)
+	{
+		print_fok_state(philo, LEFT_FORK, millis());
+		usleep(philo->rules.time_to_die * 1000);
+		*philo->someone_died = philo->rules.time_to_die;
+		print_death(philo);
+		return (NULL);
+	}
+	while (!*philo->someone_died && *philo->rules.times_to_eat)
 		philo_routine_step(philo);
 	return (NULL);
 }

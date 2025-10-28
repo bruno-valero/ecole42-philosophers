@@ -6,7 +6,7 @@
 /*   By: brunofer <brunofer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 12:24:38 by brunofer          #+#    #+#             */
-/*   Updated: 2025/10/27 18:23:26 by brunofer         ###   ########.fr       */
+/*   Updated: 2025/10/28 17:58:25 by brunofer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ struct s_philo_rules
 	int	time_to_die;
 	int	time_to_eat;
 	int	time_to_sleep;
-	int	times_to_eat;
+	int	*times_to_eat;
 };
 
 typedef struct s_philo			t_philo;
@@ -56,9 +56,10 @@ struct s_philo
 	int				is_thinking;
 	int				is_sleepping;
 	int				is_dead;
-	int				*someone_died;
+	unsigned long	*someone_died;
 	pthread_mutex_t	*pause_mutex;
 	pthread_mutex_t	*print_mutex;
+	pthread_mutex_t	*dead_mutex;
 	int				error;
 	void			*(*stop)(t_philo *philo);
 };
@@ -68,10 +69,11 @@ struct s_create_philo
 {
 	int				id;
 	unsigned long	start_time;
-	int				*someone_died;
+	unsigned long	*someone_died;
 	t_fork			**forks;
 	int				forks_amount;
 	pthread_mutex_t	*print_mutex;
+	pthread_mutex_t	*dead_mutex;
 	pthread_mutex_t	*pause;
 	t_philo_rules	rules;
 };

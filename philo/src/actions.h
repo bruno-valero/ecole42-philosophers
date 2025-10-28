@@ -6,7 +6,7 @@
 /*   By: brunofer <brunofer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 16:03:10 by brunofer          #+#    #+#             */
-/*   Updated: 2025/10/27 19:49:29 by brunofer         ###   ########.fr       */
+/*   Updated: 2025/10/28 17:17:58 by brunofer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ void	print_fok_state(
 void	print_eatting(t_philo *philo);
 void	print_sleeping(t_philo *philo, unsigned long time);
 void	print_thinking(t_philo *philo, unsigned long time);
-void	print_death(t_philo *philo, unsigned long time);
+void	print_death(t_philo *philo);
+t_philo	*verify_death(t_philo *philo);
 
 #endif

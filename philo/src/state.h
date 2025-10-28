@@ -6,7 +6,7 @@
 /*   By: brunofer <brunofer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 17:44:01 by brunofer          #+#    #+#             */
-/*   Updated: 2025/10/27 18:33:16 by brunofer         ###   ########.fr       */
+/*   Updated: 2025/10/28 17:15:42 by brunofer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ enum e_error_state
 	ERROR_ON_FORK_CREATION,
 	ERROR_ON_PHILO_CREATION,
 	ERROR_ON_PRINT_MUTEXT_CREATION,
+	ERROR_ON_DEAD_MUTEXT_CREATION,
 	ERROR_ON_MONITOR_CREATION,
 };
 
@@ -47,7 +48,8 @@ struct s_state
 	t_fork			**forks;
 	t_error_state	error;
 	pthread_mutex_t	*print_mutex;
-	int				someone_died;
+	pthread_mutex_t	*dead_mutex;
+	unsigned long	someone_died;
 };
 
 t_create_philo	params_philo(int id, t_state *state);
