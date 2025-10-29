@@ -6,14 +6,14 @@
 /*   By: brunofer <brunofer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 12:25:31 by brunofer          #+#    #+#             */
-/*   Updated: 2025/10/28 18:00:47 by brunofer         ###   ########.fr       */
+/*   Updated: 2025/10/29 18:05:30 by brunofer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static void	destroy_fork(t_fork *fork);
-static void	*stop_philosopher(t_philo *philo);
+static void	destroy_fork(t_fork *fork, int execute_free);
+static void	*stop_philosopher(t_philo *philo, int execute_free);
 static void	*philo_routine(void *input);
 
 t_philo	*create_philo(t_create_philo create_philo)
@@ -56,26 +56,30 @@ t_fork	*create_fork(int id)
 	return (fork);
 }
 
-static void	destroy_fork(t_fork *fork)
+static void	destroy_fork(t_fork *fork, int execute_free)
 {
 	t_fork	**self_ref;
 
 	self_ref = fork->self_ref;
-	pthread_mutex_destroy(&fork->mutex);
-	free(fork);
-	*self_ref = NULL;
+	if (!execute_free)
+		pthread_mutex_destroy(&fork->mutex);
+	if (execute_free)
+	{
+		free(fork);
+		*self_ref = NULL;
+	}
 }
 
-static void	*stop_philosopher(t_philo *philo)
+static void	*stop_philosopher(t_philo *philo, int execute_free)
 {
-	t_philo	**self_ref;
-
-	self_ref = philo->self_ref;
-	pthread_join(philo->thread, NULL);
-	pthread_mutex_destroy(philo->pause_mutex);
-	free(philo->pause_mutex);
-	free(philo);
-	*self_ref = NULL;
+	if (!execute_free)
+		pthread_join(philo->thread, NULL);
+	if (execute_free)
+	{
+		pthread_mutex_destroy(philo->pause_mutex);
+		free(philo->pause_mutex);
+		free(philo);
+	}
 	return (NULL);
 }
 
@@ -90,11 +94,17 @@ static void	*philo_routine(void *param)
 	{
 		print_fok_state(philo, LEFT_FORK, millis());
 		usleep(philo->rules.time_to_die * 1000);
+		philo->is_dead = 1;
 		*philo->someone_died = philo->rules.time_to_die;
 		print_death(philo);
 		return (NULL);
 	}
-	while (!*philo->someone_died && *philo->rules.times_to_eat)
+	if (philo->rules.times_to_eat <= 0)
+		philo->meals_eaten = -5;
+	while (!verify_death(philo)
+		&& philo->meals_eaten < philo->rules.times_to_eat)
 		philo_routine_step(philo);
+	if (philo->meals_eaten == philo->rules.times_to_eat)
+		*philo->every_one_ate += 1;
 	return (NULL);
 }

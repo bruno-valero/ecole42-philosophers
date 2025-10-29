@@ -6,7 +6,7 @@
 /*   By: brunofer <brunofer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 16:32:38 by brunofer          #+#    #+#             */
-/*   Updated: 2025/10/26 16:39:07 by brunofer         ###   ########.fr       */
+/*   Updated: 2025/10/29 18:50:54 by brunofer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,6 @@
 
 # include <sys/time.h>
 
-unsigned long	millis(void);
+long long	millis(void);
 
 #endif

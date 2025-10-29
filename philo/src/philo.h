@@ -6,7 +6,7 @@
 /*   By: brunofer <brunofer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 12:24:38 by brunofer          #+#    #+#             */
-/*   Updated: 2025/10/28 17:58:25 by brunofer         ###   ########.fr       */
+/*   Updated: 2025/10/29 20:17:23 by brunofer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ struct s_fork
 	pthread_mutex_t	mutex;
 	int				is_used_by;
 	int				error;
-	void			(*destroy)(t_fork *fork);
+	void			(*destroy)(t_fork *fork, int execute_free);
 };
 
 typedef struct s_philo_rules	t_philo_rules;
@@ -38,7 +38,7 @@ struct s_philo_rules
 	int	time_to_die;
 	int	time_to_eat;
 	int	time_to_sleep;
-	int	*times_to_eat;
+	int	times_to_eat;
 };
 
 typedef struct s_philo			t_philo;
@@ -46,30 +46,34 @@ struct s_philo
 {
 	t_philo			**self_ref;
 	int				id;
-	unsigned long	start_time;
+	long long		start_time;
 	pthread_t		thread;
 	t_fork			*right_fork;
 	t_fork			*left_fork;
 	t_philo_rules	rules;
 	int				is_eating;
-	unsigned long	last_meal;
+	long long		last_meal;
+	long long		last_finished_meal;
 	int				is_thinking;
 	int				is_sleepping;
 	int				is_dead;
-	unsigned long	*someone_died;
+	int				meals_eaten;
+	int				*every_one_ate;
+	long long		*someone_died;
 	pthread_mutex_t	*pause_mutex;
 	pthread_mutex_t	*print_mutex;
 	pthread_mutex_t	*dead_mutex;
 	int				error;
-	void			*(*stop)(t_philo *philo);
+	void			*(*stop)(t_philo *philo, int execute_free);
 };
 
 typedef struct s_create_philo	t_create_philo;
 struct s_create_philo
 {
 	int				id;
-	unsigned long	start_time;
-	unsigned long	*someone_died;
+	long long		start_time;
+	int				*every_one_ate;
+	long long		*someone_died;
 	t_fork			**forks;
 	int				forks_amount;
 	pthread_mutex_t	*print_mutex;

@@ -6,7 +6,7 @@
 /*   By: brunofer <brunofer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 15:32:31 by brunofer          #+#    #+#             */
-/*   Updated: 2025/10/28 18:08:09 by brunofer         ###   ########.fr       */
+/*   Updated: 2025/10/29 19:21:30 by brunofer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	init_philo(t_create_philo create_philo, t_philo *philo)
 {
 	philo->self_ref = &philo;
 	philo->start_time = create_philo.start_time;
+	philo->every_one_ate = create_philo.every_one_ate;
 	philo->someone_died = create_philo.someone_died;
 	philo->rules = create_philo.rules;
 	philo->id = create_philo.id;
@@ -40,9 +41,21 @@ static void	philo_sleep(t_philo *philo)
 
 static void	philo_eat(t_philo *philo)
 {
+	long long	curr_millis;
+	long long	diff;
+
 	if (*philo->someone_died)
 		return ;
 	eat(philo, START_TO_EAT);
+	curr_millis = millis();
+	diff = diff_time(curr_millis, philo->last_meal);
+	if (diff + philo->rules.time_to_eat >= philo->rules.time_to_die)
+	{
+		usleep(1000 * (philo->rules.time_to_die - diff));
+		verify_death(philo);
+		eat(philo, STOP_TO_EAT);
+		return ;
+	}
 	usleep(1000 * philo->rules.time_to_eat);
 	eat(philo, STOP_TO_EAT);
 }
@@ -58,10 +71,6 @@ void	philo_think(t_philo *philo)
 
 void	philo_routine_step(t_philo *philo)
 {
-	/* if (philo->id % 2)
-	{
-		usleep(1000 * philo->rules.time_to_eat);
-	} */
 	if (philo->id % 2)
 	{
 		philo_eat(philo);
@@ -74,8 +83,4 @@ void	philo_routine_step(t_philo *philo)
 		philo_think(philo);
 		philo_eat(philo);
 	}
-	/* philo_eat(philo);
-	philo_sleep(philo);
-	usleep(1000); */
-	//philo_think(philo);
 }

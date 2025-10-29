@@ -6,7 +6,7 @@
 /*   By: brunofer <brunofer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 17:44:01 by brunofer          #+#    #+#             */
-/*   Updated: 2025/10/28 17:15:42 by brunofer         ###   ########.fr       */
+/*   Updated: 2025/10/29 19:03:48 by brunofer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,14 +42,15 @@ typedef struct s_state		t_state;
 struct s_state
 {
 	pthread_t		*monitor;
-	unsigned long	start_time;
+	long long		start_time;
 	t_input			input;
 	t_philo			**philos;
 	t_fork			**forks;
 	t_error_state	error;
 	pthread_mutex_t	*print_mutex;
 	pthread_mutex_t	*dead_mutex;
-	unsigned long	someone_died;
+	long long		someone_died;
+	int				every_one_ate;
 };
 
 t_create_philo	params_philo(int id, t_state *state);

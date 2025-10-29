@@ -6,7 +6,7 @@
 /*   By: brunofer <brunofer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 15:03:14 by brunofer          #+#    #+#             */
-/*   Updated: 2025/10/28 18:26:05 by brunofer         ###   ########.fr       */
+/*   Updated: 2025/10/29 17:16:59 by brunofer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 static t_input	create_input(int input_data[5]);
 static int		init_forks(t_state *state);
 static int		init_philosophers(t_state *state);
-static void		destroy_state(t_state *state);
+static void		destroy_state(t_state *state, int execute_free);
 
 t_state	create_state(int input_data[5])
 {
 	t_state			state;
 
-	printf("create_state\n");
 	state.someone_died = 0;
+	state.every_one_ate = 0;
 	state.monitor = NULL;
 	state.error = ERROR_STATE_OK;
 	if (!init_state_mutexes(&state))
@@ -36,10 +36,11 @@ t_state	create_state(int input_data[5])
 		return (state);
 	if (!create_monitor(&state))
 	{
-		destroy_state(&state);
+		destroy_state(&state, 1);
 		return (state);
 	}
-	destroy_state(&state);
+	destroy_state(&state, 0);
+	destroy_state(&state, 1);
 	return (state);
 }
 
@@ -76,7 +77,7 @@ static int	init_philosophers(t_state *state)
 	if (state->error == ERROR_ON_PHILO_CREATION)
 	{
 		while (--i >= 0)
-			state->philos[i]->stop(state->philos[i]);
+			state->philos[i]->stop(state->philos[i], 1);
 		free(state->philos);
 		return (0);
 	}
@@ -101,28 +102,33 @@ static int	init_forks(t_state *state)
 	if (state->error == ERROR_ON_FORK_CREATION)
 	{
 		while (--i >= 0)
-			state->forks[i]->destroy(state->forks[i]);
+			state->forks[i]->destroy(state->forks[i], 1);
 		free(state->forks);
 		return (0);
 	}
 	return (1);
 }
 
-static void	destroy_state(t_state *state)
+static void	destroy_state(t_state *state, int execute_free)
 {
 	int	i;
 
 	i = -1;
 	while (++i < state->input.philos)
-		state->philos[i]->stop(state->philos[i]);
-	free(state->philos);
+		state->philos[i]->stop(state->philos[i], execute_free);
+	if (execute_free)
+		free(state->philos);
 	while (--i >= 0)
-		state->forks[i]->destroy(state->forks[i]);
-	free(state->forks);
-	state->forks = NULL;
+		state->forks[i]->destroy(state->forks[i], execute_free);
+	if (execute_free)
+		free(state->forks);
 	pthread_mutex_destroy(state->print_mutex);
-	free(state->print_mutex);
-	if (state->monitor)
+	if (execute_free)
+		free(state->print_mutex);
+	pthread_mutex_destroy(state->dead_mutex);
+	if (execute_free)
+		free(state->dead_mutex);
+	if (state->monitor && !execute_free)
 	{
 		pthread_join(*state->monitor, NULL);
 		free(state->monitor);

@@ -6,7 +6,7 @@
 /*   By: brunofer <brunofer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 18:27:27 by brunofer          #+#    #+#             */
-/*   Updated: 2025/10/28 18:33:25 by brunofer         ###   ########.fr       */
+/*   Updated: 2025/10/29 16:48:45 by brunofer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,20 +40,18 @@ static void	*monitor_routine(void *param)
 
 	death_warning = 0;
 	state = (t_state *)param;
+	if (state->input.philos == 1)
+		return (NULL);
 	while (millis() < state->start_time)
 		;
-	pthread_mutex_lock(state->print_mutex);
-	printf("monitor.routine before: %p\n", state->philos);
-	pthread_mutex_unlock(state->print_mutex);
-	while (!state->someone_died)
+	while (!state->someone_died && state->input.philos != state->every_one_ate)
 	{
+		// pthread_mutex_lock(state->print_mutex);
+		// printf("philos: %d, eaten: %d\n", state->input.philos,  state->every_one_ate);
+		// pthread_mutex_unlock(state->print_mutex);
 		usleep(800);
 		handle_death(state, &death_warning);
 	}
-	pthread_mutex_lock(state->print_mutex);
-	printf("monitor.routine after: %p\n", state->philos);
-	printf("monitor.death_warning: %d\n", death_warning);
-	pthread_mutex_unlock(state->print_mutex);
 	if (!death_warning)
 		handle_death(state, &death_warning);
 	return (NULL);
@@ -69,24 +67,10 @@ static void	handle_death(t_state *state, int *death_warning)
 	died_philo = 0;
 	curr_milli = millis();
 	i = -1;
-	pthread_mutex_lock(state->print_mutex);
-	printf("monitor.death_warning: %d\n", *death_warning);
-	printf("monitor.handle_death after: %p\n", state->philos);
-	pthread_mutex_unlock(state->print_mutex);
 	while (++i < state->input.philos)
 	{
 		philo = state->philos[i];
-		pthread_mutex_lock(state->print_mutex);
-		printf("monitor.death_warning: %d\n", *death_warning);
-		printf("philo start: %p\n", philo);
-		pthread_mutex_unlock(state->print_mutex);
-
 		pthread_mutex_lock(philo->pause_mutex);
-
-		pthread_mutex_lock(state->print_mutex);
-		printf("monitor.death_warning: %d\n", *death_warning);
-		printf("philo end: %p\n", philo);
-		pthread_mutex_unlock(state->print_mutex);
 		if (philo->is_dead)
 			died_philo = philo->id;
 		else if (verify_death(philo))
@@ -95,14 +79,7 @@ static void	handle_death(t_state *state, int *death_warning)
 				died_philo = philo->id;
 		}
 		pthread_mutex_unlock(philo->pause_mutex);
-		pthread_mutex_lock(state->print_mutex);
-		printf("monitor.death_warning: %d\n", *death_warning);
-		printf("philo end: %p\n", philo);
-		pthread_mutex_unlock(state->print_mutex);
 	}
-	pthread_mutex_lock(state->print_mutex);
-	printf("monitor.handle_death before: %p\n", state->philos);
-	pthread_mutex_unlock(state->print_mutex);
 	if (died_philo)
 	{
 		print_death(state->philos[died_philo - 1]);
