@@ -6,7 +6,7 @@
 /*   By: brunofer <brunofer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 15:32:31 by brunofer          #+#    #+#             */
-/*   Updated: 2025/10/29 19:21:30 by brunofer         ###   ########.fr       */
+/*   Updated: 2025/10/31 19:17:55 by brunofer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	init_philo(t_create_philo create_philo, t_philo *philo)
 	philo->someone_died = create_philo.someone_died;
 	philo->rules = create_philo.rules;
 	philo->id = create_philo.id;
+	philo->everyone_ate_mutex = create_philo.everyone_ate_mutex;
 	philo->print_mutex = create_philo.print_mutex;
 	philo->dead_mutex = create_philo.dead_mutex;
 	philo->right_fork = create_philo.forks[philo->id - 1];
@@ -52,8 +53,8 @@ static void	philo_eat(t_philo *philo)
 	if (diff + philo->rules.time_to_eat >= philo->rules.time_to_die)
 	{
 		usleep(1000 * (philo->rules.time_to_die - diff));
-		verify_death(philo);
 		eat(philo, STOP_TO_EAT);
+		verify_death(philo);
 		return ;
 	}
 	usleep(1000 * philo->rules.time_to_eat);

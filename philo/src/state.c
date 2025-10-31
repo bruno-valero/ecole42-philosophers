@@ -6,7 +6,7 @@
 /*   By: brunofer <brunofer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 15:03:14 by brunofer          #+#    #+#             */
-/*   Updated: 2025/10/29 17:16:59 by brunofer         ###   ########.fr       */
+/*   Updated: 2025/10/31 19:19:11 by brunofer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ static int	init_forks(t_state *state)
 {
 	int	i;
 
-	state->forks = malloc(state->input.philos * sizeof(t_fork));
+	state->forks = malloc(state->input.philos * sizeof(t_fork *));
 	i = -1;
 	while (++i < state->input.philos)
 	{
@@ -116,21 +116,24 @@ static void	destroy_state(t_state *state, int execute_free)
 	i = -1;
 	while (++i < state->input.philos)
 		state->philos[i]->stop(state->philos[i], execute_free);
-	if (execute_free)
-		free(state->philos);
-	while (--i >= 0)
-		state->forks[i]->destroy(state->forks[i], execute_free);
-	if (execute_free)
-		free(state->forks);
-	pthread_mutex_destroy(state->print_mutex);
-	if (execute_free)
-		free(state->print_mutex);
-	pthread_mutex_destroy(state->dead_mutex);
-	if (execute_free)
-		free(state->dead_mutex);
-	if (state->monitor && !execute_free)
-	{
-		pthread_join(*state->monitor, NULL);
-		free(state->monitor);
-	}
+	// if (execute_free)
+	// 	free(state->philos);
+	// if (state->monitor && !execute_free)
+	// {
+	// 	pthread_join(*state->monitor, NULL);
+	// 	free(state->monitor);
+	// }
+	// while (--i >= 0)
+	// 	state->forks[i]->destroy(state->forks[i], execute_free);
+	// if (execute_free)
+	// 	free(state->forks);
+	// pthread_mutex_destroy(state->print_mutex);
+	// if (execute_free)
+	// 	free(state->print_mutex);
+	// pthread_mutex_destroy(state->dead_mutex);
+	// if (execute_free)
+	// 	free(state->dead_mutex);
+	// pthread_mutex_destroy(state->everyone_ate_mutex);
+	// if (execute_free)
+	// 	free(state->everyone_ate_mutex);
 }

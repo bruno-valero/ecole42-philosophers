@@ -6,7 +6,7 @@
 /*   By: brunofer <brunofer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 16:03:10 by brunofer          #+#    #+#             */
-/*   Updated: 2025/10/29 18:56:47 by brunofer         ###   ########.fr       */
+/*   Updated: 2025/10/31 15:16:27 by brunofer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,8 @@ enum e_sleep_state
 	STOP_TO_SLEEP
 };
 
-void		get_fork(t_philo *philo, t_wich_fork wich_fork);
-void		drop_fork(t_philo *philo, t_wich_fork wich_fork);
+void		get_fork(t_philo *philo);
+void		drop_fork(t_philo *philo);
 void		eat(t_philo *philo, t_eat_state eat_state);
 void		think(t_philo *philo, t_think_state think_state);
 void		ft_sleep(t_philo *philo, t_sleep_state sleep_state);

@@ -6,7 +6,7 @@
 /*   By: brunofer <brunofer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 12:24:38 by brunofer          #+#    #+#             */
-/*   Updated: 2025/10/29 20:17:23 by brunofer         ###   ########.fr       */
+/*   Updated: 2025/10/31 18:13:04 by brunofer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ struct s_philo
 	int				meals_eaten;
 	int				*every_one_ate;
 	long long		*someone_died;
-	pthread_mutex_t	*pause_mutex;
+	pthread_mutex_t	*last_meal_mutex;
+	pthread_mutex_t	*everyone_ate_mutex;
 	pthread_mutex_t	*print_mutex;
 	pthread_mutex_t	*dead_mutex;
 	int				error;
@@ -77,11 +78,13 @@ struct s_create_philo
 	t_fork			**forks;
 	int				forks_amount;
 	pthread_mutex_t	*print_mutex;
+	pthread_mutex_t	*everyone_ate_mutex;
 	pthread_mutex_t	*dead_mutex;
 	pthread_mutex_t	*pause;
 	t_philo_rules	rules;
 };
 
+void	destroy_philo_fork(t_philo *philo, int execute_free);
 void	init_philo(t_create_philo create_philo, t_philo *philo);
 t_philo	*create_philo(t_create_philo create_philo);
 t_fork	*create_fork(int id);

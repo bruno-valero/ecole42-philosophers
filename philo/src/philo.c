@@ -6,7 +6,7 @@
 /*   By: brunofer <brunofer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 12:25:31 by brunofer          #+#    #+#             */
-/*   Updated: 2025/10/29 18:05:30 by brunofer         ###   ########.fr       */
+/*   Updated: 2025/10/31 19:18:15 by brunofer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,14 @@ t_philo	*create_philo(t_create_philo create_philo)
 		return (NULL);
 	ft_bzero(philo, sizeof(t_philo));
 	philo->last_meal = create_philo.start_time;
-	philo->pause_mutex = malloc(sizeof(pthread_mutex_t));
-	if (!philo->pause_mutex)
+	philo->last_finished_meal = create_philo.start_time;
+	philo->last_meal_mutex = malloc(sizeof(pthread_mutex_t));
+	if (!philo->last_meal_mutex)
 	{
 		free(philo);
 		return (NULL);
 	}
-	if (pthread_mutex_init(philo->pause_mutex, NULL))
+	if (pthread_mutex_init(philo->last_meal_mutex, NULL))
 	{
 		philo->error = 1;
 		return (philo);
@@ -76,8 +77,8 @@ static void	*stop_philosopher(t_philo *philo, int execute_free)
 		pthread_join(philo->thread, NULL);
 	if (execute_free)
 	{
-		pthread_mutex_destroy(philo->pause_mutex);
-		free(philo->pause_mutex);
+		pthread_mutex_destroy(philo->last_meal_mutex);
+		free(philo->last_meal_mutex);
 		free(philo);
 	}
 	return (NULL);
@@ -105,6 +106,12 @@ static void	*philo_routine(void *param)
 		&& philo->meals_eaten < philo->rules.times_to_eat)
 		philo_routine_step(philo);
 	if (philo->meals_eaten == philo->rules.times_to_eat)
+	{
+		pthread_mutex_lock(philo->everyone_ate_mutex);
 		*philo->every_one_ate += 1;
+		pthread_mutex_unlock(philo->everyone_ate_mutex);
+	}
+	if (philo->is_eating)
+		pthread_mutex_unlock(&philo->right_fork->mutex);
 	return (NULL);
 }
