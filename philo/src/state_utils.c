@@ -6,7 +6,7 @@
 /*   By: brunofer <brunofer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 13:55:16 by brunofer          #+#    #+#             */
-/*   Updated: 2025/10/31 19:17:17 by brunofer         ###   ########.fr       */
+/*   Updated: 2025/11/03 18:01:22 by brunofer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ t_create_philo	params_philo(int id, t_state *state)
 
 	create_philo.id = id;
 	create_philo.everyone_ate_mutex = state->everyone_ate_mutex;
+	create_philo.meals_eaten_mutex = state->meals_eaten_mutex;
 	create_philo.start_time = state->start_time;
 	create_philo.every_one_ate = &state->every_one_ate;
 	create_philo.someone_died = &state->someone_died;
@@ -38,23 +39,23 @@ static void	*mfree(void *ptr);
 int	init_state_mutexes(t_state *state)
 {
 	state->print_mutex = malloc(sizeof(pthread_mutex_t));
-	if (pthread_mutex_init(state->print_mutex, NULL))
-		state->error = 1;
+	state->error = pthread_mutex_init(state->print_mutex, NULL);
 	if (state->error)
 		return (!!mfree(state->print_mutex));
 	state->everyone_ate_mutex = malloc(sizeof(pthread_mutex_t));
-	if (pthread_mutex_init(state->everyone_ate_mutex, NULL))
-		state->error = 1;
+	state->error = pthread_mutex_init(state->everyone_ate_mutex, NULL);
 	if (state->error)
 		return (!!mfree(state->everyone_ate_mutex));
 	state->dead_mutex = malloc(sizeof(pthread_mutex_t));
-	if (pthread_mutex_init(state->dead_mutex, NULL))
-		state->error = 1;
+	state->error = pthread_mutex_init(state->dead_mutex, NULL);
 	if (state->error)
 		return (!!mfree(state->dead_mutex));
+	state->meals_eaten_mutex = malloc(sizeof(pthread_mutex_t));
+	state->error = pthread_mutex_init(state->meals_eaten_mutex, NULL);
+	if (state->error)
+		return (!!mfree(state->meals_eaten_mutex));
 	return (1);
 }
-
 
 static void	*mfree(void *ptr)
 {

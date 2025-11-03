@@ -6,16 +6,17 @@
 /*   By: brunofer <brunofer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/27 18:27:27 by brunofer          #+#    #+#             */
-/*   Updated: 2025/10/31 19:18:29 by brunofer         ###   ########.fr       */
+/*   Updated: 2025/11/03 17:38:58 by brunofer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "monitor.h"
 #include "state.h"
 
-static void	*monitor_routine(void *param);
-static void	handle_death(t_state *state, int *death_warning);
-static int	every_one_ate(t_state *state);
+static void			*monitor_routine(void *param);
+static void			handle_death(t_state *state, int *death_warning);
+static int			every_one_ate(t_state *state);
+static long long	someone_died(t_state *state);
 
 int	create_monitor(t_state *state)
 {
@@ -45,7 +46,7 @@ static void	*monitor_routine(void *param)
 		return (NULL);
 	while (millis() < state->start_time)
 		;
-	while (!state->someone_died && !every_one_ate(state))
+	while (!someone_died(state) && !every_one_ate(state))
 	{
 		usleep(800);
 		handle_death(state, &death_warning);
@@ -88,5 +89,15 @@ static int	every_one_ate(t_state *state)
 	pthread_mutex_lock(state->everyone_ate_mutex);
 	result = state->input.philos == state->every_one_ate;
 	pthread_mutex_unlock(state->everyone_ate_mutex);
+	return (result);
+}
+
+static long long	someone_died(t_state *state)
+{
+	long long	result;
+
+	pthread_mutex_lock(state->dead_mutex);
+	result = state->someone_died;
+	pthread_mutex_unlock(state->dead_mutex);
 	return (result);
 }

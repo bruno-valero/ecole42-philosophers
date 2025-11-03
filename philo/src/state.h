@@ -6,7 +6,7 @@
 /*   By: brunofer <brunofer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 17:44:01 by brunofer          #+#    #+#             */
-/*   Updated: 2025/10/31 16:09:19 by brunofer         ###   ########.fr       */
+/*   Updated: 2025/11/03 17:04:46 by brunofer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ struct s_state
 	t_philo			**philos;
 	t_fork			**forks;
 	int				error;
+	pthread_mutex_t	*meals_eaten_mutex;
 	pthread_mutex_t	*everyone_ate_mutex;
 	pthread_mutex_t	*print_mutex;
 	pthread_mutex_t	*dead_mutex;

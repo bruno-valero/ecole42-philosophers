@@ -6,7 +6,7 @@
 /*   By: brunofer <brunofer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/24 18:07:33 by brunofer          #+#    #+#             */
-/*   Updated: 2025/10/25 14:59:30 by brunofer         ###   ########.fr       */
+/*   Updated: 2025/11/03 18:02:42 by brunofer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ static int				is_number(char *str);
 static int				is_less_than_ulong(char *str);
 static unsigned long	atoul(char *str);
 static int				validate_input(char *input);
-
 
 int	*validate_arguments(int argc, char **argv)
 {
@@ -28,9 +27,9 @@ int	*validate_arguments(int argc, char **argv)
 	while (++i < argc)
 	{
 		result[i - 1] = validate_input(argv[i]);
-		if (i - 1 == 4 && result[i - 1] >= 0)
+		if (i == 5 && result[i - 1] >= 0)
 			continue ;
-		else if (i - 1 < 4 && result[i - 1] == 0)
+		else if (i < 5 && result[i - 1] == 0)
 			result[i - 1] = -1;
 		if (result[i - 1] < 0)
 		{
@@ -63,10 +62,9 @@ static int	is_number(char *str)
 
 	i = -1;
 	while (str[++i])
-		if ((str[i] < '0' && str[i] > '9') || str[i] == ' ')
+		if ((str[i] < '0' || str[i] > '9') || str[i] == ' ')
 			return (0);
 	return (1);
-
 }
 
 static int	is_less_than_ulong(char *str)

@@ -6,7 +6,7 @@
 /*   By: brunofer <brunofer@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 18:41:13 by brunofer          #+#    #+#             */
-/*   Updated: 2025/10/31 15:18:34 by brunofer         ###   ########.fr       */
+/*   Updated: 2025/11/03 17:25:24 by brunofer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,8 @@ void	print_thinking(t_philo *philo, long long time)
 void	print_death(t_philo *philo)
 {
 	pthread_mutex_lock(philo->print_mutex);
+	pthread_mutex_lock(philo->dead_mutex);
 	printf("%lld %d has died\n", *philo->someone_died, philo->id);
+	pthread_mutex_unlock(philo->dead_mutex);
 	pthread_mutex_unlock(philo->print_mutex);
 }
